@@ -1,4 +1,4 @@
-﻿namespace Flagscript.Gravatar.Unit.Tests
+﻿namespace Flagscript.Gravatar.Integration.Tests
 {
 
 	/// <summary>
@@ -20,6 +20,7 @@
 		{
 
 			Library = new GravatarLibrary();
+
 		}
 
 	}

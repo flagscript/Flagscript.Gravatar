@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 0.9.0.{build}'
+version: '0.9.0.{build}'
 
 # Maximum number of concurrent jobs for the project
 max_jobs: 1
@@ -60,9 +60,9 @@ before_build:
   - dotnet restore --verbosity m
 
 build_script:
-  # output will be in ./src/Flagscript/bin/Debug/netstandard2.0/
+  # output will be in ./src/Flagscript.Gravatar/bin/Debug/netstandard2.0/
   - dotnet build --configuration $CONFIGURATION --no-restore
-  - dotnet pack  --configuration $CONFIGURATION --no-build --no-restore
+  - dotnet pack  --configuration $CONFIGURATION --no-build
 
 #---------------------------------#
 #       tests configuration       #
@@ -71,9 +71,6 @@ build_script:
 # MS Build Test Settings - Disable
 # See test configuration in for matrix
 test: off
-
-test_script:
-  - dotnet test --configuration $CONFIGURATION --no-restore --no-build
 
 #---------------------------------#
 #      artifacts configuration    #
@@ -109,6 +106,9 @@ for:
   branches:
     except:
     - master
+  # Run Unit Tests Only
+  test_script:
+    - dotnet test --configuration $CONFIGURATION --no-restore --no-build test/Flagscript.Gravatar.Unit.Tests/Flagscript.Gravatar.Unit.Tests.csproj
 -
   matrix:
     only:
@@ -116,3 +116,6 @@ for:
   branches:
     only:
     - master
+  # Run Unit and Integration Tests
+  test_script:
+    - dotnet test --configuration $CONFIGURATION --no-restore --no-build

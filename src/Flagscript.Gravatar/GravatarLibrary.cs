@@ -62,7 +62,7 @@ namespace Flagscript.Gravatar
 			try 
 			{
 
-				var profiles = await requestUrl.GetJsonAsync<GravatarResponse>();
+				var profiles = await requestUrl.WithHeaders(new { User_Agent = "Flagscript.Gravatar" }).GetJsonAsync<GravatarResponse>();
 
 				if (profiles == null)
 				{
@@ -95,7 +95,7 @@ namespace Flagscript.Gravatar
 					throw new GravatarNotFoundException($"Gravatar for email {email} does not exist");
 				}
 
-				throw fhe;
+				throw;
 			}
 			
 
