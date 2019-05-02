@@ -108,7 +108,7 @@ for:
     - master
   # Run Unit Tests Only
   test_script:
-    - dotnet test --configuration $CONFIGURATION --no-restore --no-build test/Flagscript.Gravatar.Unnit.Tests/Flagscript.Gravatar.Unit.Tests.csproj
+    - dotnet test --configuration $CONFIGURATION --no-restore --no-build test/Flagscript.Gravatar.Unit.Tests/Flagscript.Gravatar.Unit.Tests.csproj
 -
   matrix:
     only:
