@@ -62,7 +62,7 @@ namespace Flagscript.Gravatar
 			try 
 			{
 
-				var profiles = await requestUrl.GetJsonAsync<GravatarResponse>();
+				var profiles = await requestUrl.WithHeaders(new { User_Agent = "Flagscript.Gravatar" }).GetJsonAsync<GravatarResponse>();
 
 				if (profiles == null)
 				{
