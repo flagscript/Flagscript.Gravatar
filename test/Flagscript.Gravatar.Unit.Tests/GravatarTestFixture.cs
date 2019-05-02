@@ -2,7 +2,7 @@
 {
 
 	/// <summary>
-	/// Test Fixture for the various 
+	/// Test Fixture for the various gravatar unit tests.
 	/// </summary>
 	public class GravatarTestFixture
 	{
