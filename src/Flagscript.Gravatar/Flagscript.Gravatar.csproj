@@ -2,6 +2,38 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackOnBuild>false</PackOnBuild>
+    <PackageVersion>0.9.0</PackageVersion>
+    <Authors>Greg Kaestle, Flagscript</Authors>
+    <Company>Flagscript</Company>
+    <Copyright>©2019 Flagscript</Copyright>
+    <PackageIconUrl>https://raw.githubusercontent.com/flagscript/Flagscript/master/flagscript-nuget.png</PackageIconUrl>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/flagscript/Flagscript.Gravatar</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Owners>Greg Kaestle, Flagscript</Owners>
+    <PackageProjectUrl>https://github.com/flagscript/Flagscript.Gravatar/projects/1</PackageProjectUrl>
+    <PackageReleaseNotes>Beta Release</PackageReleaseNotes>
+    <Summary>Dotnet Standard integration with Gravatar APIs</Summary>
+    <PackageTags>dotnet, dotnet-standard, dotnet-library, flagscript, gravatar</PackageTags>
+    <Description>Dotnet Standard integration with Gravatar APIs</Description>
+    <AssemblyVersion>0.9.0</AssemblyVersion>
+    <FileVersion>0.9.0</FileVersion>
+    <InformationalVersion>0.9.0</InformationalVersion>
+    <PackageId>Flagscript.Gravatar</PackageId>
+    <Product>Flagscript.Gravatar</Product>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="Flagscript" Version="3.1.0" />
+    <PackageReference Include="Flurl" Version="2.8.2" />
+    <PackageReference Include="Flurl.Http" Version="2.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
 
 </Project>

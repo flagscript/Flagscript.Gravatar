@@ -1,0 +1,32 @@
+﻿{
+	"entry": [
+		{
+			"id": "1",
+			"hash": "c3b760c9f631cd35940be41dd8069790",
+			"requestHash": "22222222222222222222222222222222",
+			"profileUrl": "http:\/\/gravatar.com\/test",
+			"preferredUsername": "test",
+			"thumbnailUrl": "https:\/\/secure.gravatar.com\/avatar\/22222222222222222222222222222222",
+			"photos": [
+				{
+					"value": "https:\/\/secure.gravatar.com\/avatar\/22222222222222222222222222222222",
+					"type": "thumbnail"
+				}
+			],
+			"name": {
+				"givenName": "first",
+				"familyName": "last",
+				"formatted": "full"
+			},
+			"displayName": "test",
+			"aboutMe": "unit test",
+			"currentLocation": "earth",
+			"urls": [
+				{
+					"value": "https:\/\/flagscript.technology",
+					"title": "Flagscript Technology"
+				}
+			]
+		}
+	]
+}
