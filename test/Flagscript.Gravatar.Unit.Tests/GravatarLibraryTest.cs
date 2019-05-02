@@ -122,7 +122,7 @@ namespace Flagscript.Gravatar.Unit.Tests
 					var fakeEmail = "fakeemail@nodomain.tech";
 					var slimJson = File.ReadAllText("empty-gravatar.json");
 					httpTest.RespondWith(slimJson, status: 200);
-					var profile = await TestFixture.Library.GetGravatarProfile(fakeEmail);
+					await TestFixture.Library.GetGravatarProfile(fakeEmail);
 					Assert.False(true, "Empty Gravitar did not exception");
 
 				}
