@@ -95,7 +95,7 @@ namespace Flagscript.Gravatar
 					throw new GravatarNotFoundException($"Gravatar for email {email} does not exist");
 				}
 
-				throw fhe;
+				throw;
 			}
 			
 
