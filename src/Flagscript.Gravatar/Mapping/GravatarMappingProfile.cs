@@ -26,6 +26,7 @@ namespace Flagscript.Gravatar.Mapping
 			CreateMap<EntryResponse, GravatarProfile>()
 				.ForMember(d => d.About, o => o.MapFrom(s => s.AboutMe)) 
 				.ForMember(d => d.ProfileUrl, o => o.MapFrom(s => s.ProfileUrl))
+				.ForMember(d => d.ThumbnailUrl, o => o.MapFrom(s => s.ThumbnailUrl))
 				.ForMember(d => d.FirstName, o => o.ResolveUsing(s => s.Name?.GivenName))
 				.ForMember(d => d.FullName, o => o.ResolveUsing(s => s.Name?.Formatted))
 				.ForMember(d => d.LastName, o => o.ResolveUsing(s => s.Name?.FamilyName));

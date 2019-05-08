@@ -5,10 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
+using Microsoft.Extensions.Logging;
+
 using AutoMapper;
 using Flurl;
 using Flurl.Http;
 
+using Flagscript.Caching.Memory;
 using Flagscript.Gravatar.Integration;
 using Flagscript.Gravatar.Mapping;
 
@@ -49,55 +52,66 @@ namespace Flagscript.Gravatar
 			return config;
 		}
 
+		/// <summary>
+		/// Memory Cache to use for Gravatars.
+		/// </summary>
+		/// <value> Memory Cache to use for Gravatars.</value>
+		private GravatarProfileMemoryCache MemoryCache { get; set; }
+
+		/// <summary>
+		/// Logger used for logging.
+		/// </summary>
+		/// <value>Logger used for logging..</value>
+		private ILogger Logger { get; set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GravatarLibrary"/> class.
+		/// </summary>
+		public GravatarLibrary()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GravatarLibrary"/> class
+		/// with a logging context.
+		/// </summary>
+		/// <param name="logger">Logger to be used for logging.</param>
+		public GravatarLibrary(ILogger logger) => Logger = logger;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GravatarLibrary"/> class with a 
+		/// memory cache.
+		/// </summary>
+		/// <param name="memoryCache">Memory cache.</param>
+		public GravatarLibrary(GravatarProfileMemoryCache memoryCache) => MemoryCache = memoryCache;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GravatarLibrary"/> class 
+		/// with a memory cache and logging context.
+		/// </summary>
+		/// <param name="memoryCache">Memory cache.</param>
+		/// <param name="logger">Logger to be used for logging.</param>
+		public GravatarLibrary(GravatarProfileMemoryCache memoryCache, ILogger logger) => (MemoryCache, Logger) = (memoryCache, logger);
+
+
 		public async Task<GravatarProfile> GetGravatarProfile(string email)
 		{
 
-			var profile = new GravatarProfile(email);
-
-			// Generate Gravatar Email Hash.
-			var gravatarHash = GenerateEmailHash(profile.Email);
-
-			// Get the profile JSON as an object
-			var requestUrl = Url.Combine(GravatarUrlPrefix, $"{gravatarHash}{GravatarUrlSuffix}");
-			try 
+			if (MemoryCache != null)
 			{
 
-				var profiles = await requestUrl.WithHeaders(new { User_Agent = "Flagscript.Gravatar" }).GetJsonAsync<GravatarResponse>();
-
-				if (profiles == null)
+				object cacheKey = MemoryCache.GenerateCacheKey(email);
+				return await MemoryCache.GetOrCreateAsync(cacheKey, async () =>
 				{
-					throw new FlagscriptException($"Error retrieving Gravatar profile for {email}.");
-				}
 
-				// Validate we got a response
-				var matchEntry = profiles.Entries.FirstOrDefault(e => e.Hash == gravatarHash);
-				if (matchEntry == null)
-				{
-					throw new FlagscriptException($"Call to Gravatar did not return any entries for {email}.");
-				}
+					// Need to get the entry into the Get/Create Async method in the future.
+					return await GetProfileFromGravatar(email).ConfigureAwait(false);
 
-				// Map to output object
-				return ResponseMapper.Map(matchEntry, profile);
+				});
 
 			}
-			catch (FlurlParsingException)
-			{
-				// This can be thrown when a user has not configured either a first, last, or full name
-				// in Gravatar. The JSON that comes back in this case is an empty array for the name property
-				// [], vs an object if these are set. This could be fixed with a custom serializer, but as this
-				// is just for framework use at the moment, we will leave it. 
-				throw new FlagscriptException($"Gravatar {email} does not contain any name information.");
-			}
-			catch (FlurlHttpException fhe)
-			{
-				if (fhe.Call.HttpStatus == HttpStatusCode.NotFound)
-				{
-					throw new GravatarNotFoundException($"Gravatar for email {email} does not exist");
-				}
 
-				throw;
-			}
-			
+			return await GetProfileFromGravatar(email).ConfigureAwait(false);			
 
 		}
 
@@ -131,6 +145,63 @@ namespace Flagscript.Gravatar
 				}
 				return sBuilder.ToString();
 
+			}
+
+		}
+
+		/// <summary>
+		/// Creates a <see cref="GravatarProfile"/> from the Gravatar web api.
+		/// </summary>
+		/// <param name="email">Email address of the gravatar profile.</param>
+		/// <returns>The <see cref="GravatarProfile"/> from gravatar web api.</returns>
+		private async Task<GravatarProfile> GetProfileFromGravatar(string email)
+		{
+
+
+			var profile = new GravatarProfile(email);
+
+			// Generate Gravatar Email Hash.
+			var gravatarHash = GenerateEmailHash(profile.Email);
+
+			// Get the profile JSON as an object
+			var requestUrl = Url.Combine(GravatarUrlPrefix, $"{gravatarHash}{GravatarUrlSuffix}");
+			try
+			{
+
+				var profiles = await requestUrl.WithHeaders(new { User_Agent = "Flagscript.Gravatar" }).GetJsonAsync<GravatarResponse>().ConfigureAwait(false);
+
+				if (profiles == null)
+				{
+					throw new FlagscriptException($"Error retrieving Gravatar profile for {email}.");
+				}
+
+				// Validate we got a response
+				var matchEntry = profiles.Entries.FirstOrDefault(e => e.Hash == gravatarHash);
+				if (matchEntry == null)
+				{
+					throw new FlagscriptException($"Call to Gravatar did not return any entries for {email}.");
+				}
+
+				// Map to output object
+				return ResponseMapper.Map(matchEntry, profile);
+
+			}
+			catch (FlurlParsingException)
+			{
+				// This can be thrown when a user has not configured either a first, last, or full name
+				// in Gravatar. The JSON that comes back in this case is an empty array for the name property
+				// [], vs an object if these are set. This could be fixed with a custom serializer, but as this
+				// is just for framework use at the moment, we will leave it. 
+				throw new FlagscriptException($"Gravatar {email} does not contain any name information.");
+			}
+			catch (FlurlHttpException fhe)
+			{
+				if (fhe.Call.HttpStatus == HttpStatusCode.NotFound)
+				{
+					throw new GravatarNotFoundException($"Gravatar for email {email} does not exist");
+				}
+
+				throw;
 			}
 
 		}
