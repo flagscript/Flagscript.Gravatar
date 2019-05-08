@@ -48,6 +48,23 @@ namespace Flagscript.Gravatar.Integration.Tests
 
         }
 
-    }
+		/// <summary>
+		/// Integration Test for <see cref="GravatarLibrary.GetGravatarProfile(string)"/> with
+		/// memory cache.
+		/// </summary>
+		[Fact]
+		public async Task TestGravatarLibraryGetProfileWithMemCache()
+		{
+
+			var testEmail = Environment.GetEnvironmentVariable("TEST_EMAIL");
+			var emailProfile = await TestFixture.CacheLibrary.GetGravatarProfile(testEmail);
+			Assert.Equal("Kaestle", emailProfile.LastName);
+			var emailProfileCache = await TestFixture.CacheLibrary.GetGravatarProfile(testEmail);
+			Assert.Same(emailProfile, emailProfileCache);
+
+		}
+
+
+	}
 
 }

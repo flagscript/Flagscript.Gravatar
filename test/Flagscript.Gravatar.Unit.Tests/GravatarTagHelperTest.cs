@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
+using Flurl.Http.Testing;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -36,6 +38,7 @@ namespace Flagscript.Gravatar.Unit.Tests
 		[Fact]
 		public async Task TestTagHelper()
 		{
+		
 			var tagHelper = new GravatarTagHelper();
 
 			var ctx = new TagHelperContext(
@@ -52,15 +55,24 @@ namespace Flagscript.Gravatar.Unit.Tests
 				new TagHelperAttributeList(), (useCachedResult, htmlEncoder) =>
 				{
 					var tagHelperContent = new DefaultTagHelperContent();
-					tagHelperContent.SetContent("fakeemail@flagscript.tech");
+					tagHelperContent.SetContent("fakeemail@nodomain.tech");
 					return Task.FromResult<TagHelperContent>(tagHelperContent);
 				}
 			);
 
 			tagHelper.Alt = "hi";
 			tagHelper.Size = 80;
-			await tagHelper.ProcessAsync(ctx, output);
 
+			using (var httpTest = new HttpTest())
+			{
+				var fullJson = File.ReadAllText("proper-gravatar.json");
+				httpTest.RespondWith(fullJson, status: 200);
+				await tagHelper.ProcessAsync(ctx, output);
+
+			}
+							
+
+			Output.WriteLine($"Tag is {output.TagName}");
 			Assert.Equal("img", output.TagName);
 			Assert.Contains("s=80", output.Attributes["src"].Value.ToString());
 			Assert.Equal("hi", output.Attributes["alt"].Value.ToString());

@@ -157,6 +157,41 @@ namespace Flagscript.Gravatar.Unit.Tests
 				Assert.Equal("full", profile.FullName);
 				Assert.Equal("unit test", profile.About);
 				Assert.Contains("gravatar.com", profile.ProfileUrl);
+				Assert.Contains("gravatar.com", profile.ThumbnailUrl);
+
+			}
+
+		}
+
+		/// <summary>
+		/// Test <see cref="GravatarLibrary.GetGravatarProfile(string)"/> with memcache.
+		/// </summary>
+		[Fact]
+		public async Task TestGetGravatarProfileFullJsonTestCache()
+		{
+
+			using (var httpTest = new HttpTest())
+			{
+				var fakeEmailNonNormalize = "    FakeEmaiL@NoDomain.tecH    ";
+				var fakeEmailHash = TestFixture.CacheLibrary.GenerateEmailHash(fakeEmailNonNormalize);
+				Output.WriteLine("=>     " + fakeEmailHash);
+
+				// Get version using Flurl Mock
+				var fakeEmail = "fakeemail@nodomain.tech";
+				var fullJson = File.ReadAllText("proper-gravatar.json");
+				httpTest.RespondWith(fullJson, status: 200);
+				var profile = await TestFixture.CacheLibrary.GetGravatarProfile(fakeEmailNonNormalize);
+				Assert.Equal(fakeEmail, profile.Email);
+				Assert.Equal("first", profile.FirstName);
+				Assert.Equal("last", profile.LastName);
+				Assert.Equal("full", profile.FullName);
+				Assert.Equal("unit test", profile.About);
+				Assert.Contains("gravatar.com", profile.ProfileUrl);
+				Assert.Contains("gravatar.com", profile.ThumbnailUrl);
+
+				// Get from Cache - no mock
+				var cachedProfile = await TestFixture.CacheLibrary.GetGravatarProfile(fakeEmailNonNormalize);
+				Assert.Same(profile, cachedProfile);
 
 			}
 

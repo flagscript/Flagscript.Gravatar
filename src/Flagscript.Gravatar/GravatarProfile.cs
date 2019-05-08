@@ -22,6 +22,12 @@ namespace Flagscript.Gravatar
 		public string ProfileUrl { get; internal set; }
 
 		/// <summary>
+		/// Thumbnail Url of the Gravatar user.
+		/// </summary>
+		/// <value>Thumbnail Url of the Gravatar user.</value>
+		public string ThumbnailUrl { get; internal set; }
+
+		/// <summary>
 		/// First name of the profile.
 		/// </summary>
 		/// <value>First name of the profile.</value>
