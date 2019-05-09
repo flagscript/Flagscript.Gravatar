@@ -1,4 +1,4 @@
-# Flagscript Documentation (>= v3.1.0)
+# Flagscript.Gravatar Documentation (>= v0.9.1-beta)
 
 Thanks for using Flagscript! If you have any quesitons, feel free to post a question on the [issues board](../../issues). 
 
