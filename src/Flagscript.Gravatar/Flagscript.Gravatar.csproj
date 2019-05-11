@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackOnBuild>false</PackOnBuild>
-    <PackageVersion>0.9.1</PackageVersion>
+    <PackageVersion>0.9.2</PackageVersion>
     <Authors>Greg Kaestle, Flagscript</Authors>
     <Company>Flagscript</Company>
     <Copyright>©2019 Flagscript</Copyright>
@@ -19,9 +19,9 @@
     <Summary>Dotnet Standard integration with Gravatar APIs</Summary>
     <PackageTags>dotnet, dotnet-standard, dotnet-library, flagscript, gravatar</PackageTags>
     <Description>Dotnet Standard integration with Gravatar APIs</Description>
-    <AssemblyVersion>0.9.1</AssemblyVersion>
-    <FileVersion>0.9.1</FileVersion>
-    <InformationalVersion>0.9.1</InformationalVersion>
+    <AssemblyVersion>0.9.2</AssemblyVersion>
+    <FileVersion>0.9.2</FileVersion>
+    <InformationalVersion>0.9.2</InformationalVersion>
     <PackageId>Flagscript.Gravatar</PackageId>
     <Product>Flagscript.Gravatar</Product>
   </PropertyGroup>
