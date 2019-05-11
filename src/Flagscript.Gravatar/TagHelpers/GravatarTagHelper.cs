@@ -18,7 +18,7 @@ namespace Flagscript.Gravatar.TagHelpers
 		/// <summary>
 		/// Fallback Gravatara Base Url.
 		/// </summary>
-		private const string GravatarImageBaseUrl = "https://s.gravatar.com/avatar/";
+		//private const string GravatarImageBaseUrl = "https://s.gravatar.com/avatar/";
 
 		/// <summary>
 		/// The alt text value
@@ -66,7 +66,7 @@ namespace Flagscript.Gravatar.TagHelpers
 		/// with a logging context.
 		/// </summary>
 		/// <param name="logger">Logger to log errors and warnings.</param>
-		public GravatarTagHelper(ILogger logger) => (Library, Logger) = (new GravatarLibrary(), logger);
+		public GravatarTagHelper(ILogger<GravatarTagHelper> logger) => (Library, Logger) = (new GravatarLibrary(), logger);
 
 		/// <summary>
 		/// Constructor with a <see cref="GravatarLibrary"/> to obtain profiles.
@@ -80,7 +80,7 @@ namespace Flagscript.Gravatar.TagHelpers
 		/// </summary>
 		/// <param name="library">Gravatar Library to obtain profiles.</param>
 		/// <param name="logger">Logger to log errors and warnings.</param>
-		public GravatarTagHelper(GravatarLibrary library, ILogger logger) => (Library, Logger) = (library, logger);
+		public GravatarTagHelper(GravatarLibrary library, ILogger<GravatarTagHelper> logger) => (Library, Logger) = (library, logger);
 
 		/// <summary>
 		/// Asynchronously executes the <see cref="TagHelper"/> with the given <c>context</c> 
@@ -121,6 +121,7 @@ namespace Flagscript.Gravatar.TagHelpers
 			}
 			catch (Exception ex)
 			{
+
 				Logger?.LogWarning(ex, $"Exception retrieving gravatar profile for {gravatarEmail}. Suppressing output.");
 				output.SuppressOutput();
 				return;
