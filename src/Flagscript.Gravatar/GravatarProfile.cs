@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Flurl;
+
 namespace Flagscript.Gravatar
 {
 

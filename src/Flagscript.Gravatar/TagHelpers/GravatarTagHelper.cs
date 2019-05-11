@@ -97,9 +97,11 @@ namespace Flagscript.Gravatar.TagHelpers
 			var gravatarEmail = content.GetContent();
 			if (string.IsNullOrWhiteSpace(gravatarEmail))
 			{
+
 				Logger?.LogWarning($"Tag helper gravatar email missing content. Suppressing output.");
 				output.SuppressOutput();
 				return;
+
 			}
 
 			output.TagName = "img";
@@ -111,12 +113,26 @@ namespace Flagscript.Gravatar.TagHelpers
 				var profile = await Library.GetGravatarProfile(gravatarEmail);
 				if (profile == null)
 				{
+
 					Logger?.LogWarning($"Unable to retrieve gravatar profile for {gravatarEmail}. Suppressing output.");
 					output.SuppressOutput();
 					return;
+
 				}
-				var gravatarUrl = profile.ThumbnailUrl.SetQueryParam("s", Size);
-				output.Attributes.SetAttribute("src", gravatarUrl);
+
+				if (Size.HasValue)
+				{
+
+					output.Attributes.SetAttribute("src", profile.ThumbnailUrl.SetQueryParam("s", Size));
+
+				}
+				else
+				{
+
+					// 80x80
+					output.Attributes.SetAttribute("src", profile.ThumbnailUrl);
+
+				}
 
 			}
 			catch (Exception ex)
@@ -125,16 +141,21 @@ namespace Flagscript.Gravatar.TagHelpers
 				Logger?.LogWarning(ex, $"Exception retrieving gravatar profile for {gravatarEmail}. Suppressing output.");
 				output.SuppressOutput();
 				return;
+
 			}
 			
 			// Pass-through attributes
 			if (!string.IsNullOrWhiteSpace(Alt))
 			{
+
 				output.Attributes.SetAttribute("alt", Alt);
+
 			}
 			if (!string.IsNullOrWhiteSpace(Class))
 			{
+
 				output.Attributes.SetAttribute("class", Class);
+
 			}					
 
 			// html 5 img tag compliance
