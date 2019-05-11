@@ -76,7 +76,7 @@ namespace Flagscript.Gravatar
 		/// with a logging context.
 		/// </summary>
 		/// <param name="logger">Logger to be used for logging.</param>
-		public GravatarLibrary(ILogger logger) => Logger = logger;
+		public GravatarLibrary(ILogger<GravatarLibrary> logger) => Logger = logger;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GravatarLibrary"/> class with a 
@@ -91,7 +91,7 @@ namespace Flagscript.Gravatar
 		/// </summary>
 		/// <param name="memoryCache">Memory cache.</param>
 		/// <param name="logger">Logger to be used for logging.</param>
-		public GravatarLibrary(GravatarProfileMemoryCache memoryCache, ILogger logger) => (MemoryCache, Logger) = (memoryCache, logger);
+		public GravatarLibrary(GravatarProfileMemoryCache memoryCache, ILogger<GravatarLibrary> logger) => (MemoryCache, Logger) = (memoryCache, logger);
 
 
 		public async Task<GravatarProfile> GetGravatarProfile(string email)
@@ -100,6 +100,7 @@ namespace Flagscript.Gravatar
 			if (MemoryCache != null)
 			{
 
+				Logger?.LogDebug($"Retrieveing Gravatar {email} from cache.");
 				object cacheKey = MemoryCache.GenerateCacheKey(email);
 				return await MemoryCache.GetOrCreateAsync(cacheKey, async () =>
 				{
@@ -111,6 +112,7 @@ namespace Flagscript.Gravatar
 
 			}
 
+			Logger?.LogDebug($"Retrieveing Gravatar {email} directly due to no cache.");
 			return await GetProfileFromGravatar(email).ConfigureAwait(false);			
 
 		}
@@ -172,14 +174,18 @@ namespace Flagscript.Gravatar
 
 				if (profiles == null)
 				{
-					throw new FlagscriptException($"Error retrieving Gravatar profile for {email}.");
+					var throwEx = new FlagscriptException($"Gravatar Profile call for {email} returned empty body.");
+					Logger?.LogWarning(throwEx, throwEx.Message);
+					throw throwEx;
 				}
 
 				// Validate we got a response
 				var matchEntry = profiles.Entries.FirstOrDefault(e => e.Hash == gravatarHash);
 				if (matchEntry == null)
 				{
-					throw new FlagscriptException($"Call to Gravatar did not return any entries for {email}.");
+					var throwEx = new FlagscriptException($"Call to Gravatar did not return any entries for {email}.");
+					Logger?.LogWarning(throwEx, throwEx.Message);
+					throw throwEx;
 				}
 
 				// Map to output object
@@ -192,13 +198,17 @@ namespace Flagscript.Gravatar
 				// in Gravatar. The JSON that comes back in this case is an empty array for the name property
 				// [], vs an object if these are set. This could be fixed with a custom serializer, but as this
 				// is just for framework use at the moment, we will leave it. 
-				throw new FlagscriptException($"Gravatar {email} does not contain any name information.");
+				var throwEx = new FlagscriptException($"Gravatar {email} does not contain any name information.");
+				Logger?.LogError(throwEx, throwEx.Message);
+				throw throwEx;
 			}
 			catch (FlurlHttpException fhe)
 			{
 				if (fhe.Call.HttpStatus == HttpStatusCode.NotFound)
 				{
-					throw new GravatarNotFoundException($"Gravatar for email {email} does not exist");
+					var throwEx = new GravatarNotFoundException($"Gravatar for email {email} does not exist.");
+					Logger?.LogError(throwEx, throwEx.Message);
+					throw throwEx;
 				}
 
 				throw;
