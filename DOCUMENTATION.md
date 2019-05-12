@@ -47,5 +47,29 @@ An aspnet core tag helper is available to display gravatar images. This tag help
 DI Setup:
 
 ```csharp
+// Startup.cs
+using Flagscript.Gravatar;
+using Flagscript.Gravatar.TagHelpers;
 
+public void ConfigureServices(IServiceCollection services)
+{
+
+	// Flagscript Injects
+	services.AddSingleton<GravatarProfileMemoryCache>();
+	services.AddSingleton<GravatarLibrary>();
+	services.AddSingleton<GravatarTagHelperConfiguration>();
+
+}
+```
+
+View Imports:
+
+```csharp
+@addTagHelper *, Flagscript.Gravatar
+```
+
+Razor:
+
+```csharp
+<gravatar size="250">someemail@somedomain.com</gravatar>
 ```
