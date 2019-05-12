@@ -1,9 +1,5 @@
-### 3.1.1 (4/24/2019)
+### v1.0.0 (5/11/2019)
 
-* Fix NuGet metadata
-* Clean Codacy Issues
-
-### 3.1.0 (4/24/2019)
-
-* Added configuration exception
-  * The exception FlagscriptConfigurationException can now be caught to distinguish Flagscript configuration exceptions from general Flagscript framework exceptions.
+* **Feature:** Gravatar Profile MemCache
+* **Feature:** Gravatar Library: Email Hashes and Profiles
+* **Feature:** Tag Helper: Razor Gravatar Image Tag Helper
