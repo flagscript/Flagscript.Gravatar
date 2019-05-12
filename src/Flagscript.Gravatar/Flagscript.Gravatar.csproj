@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackOnBuild>false</PackOnBuild>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
     <Authors>Greg Kaestle, Flagscript</Authors>
     <Company>Flagscript</Company>
     <Copyright>©2019 Flagscript</Copyright>
@@ -14,14 +14,14 @@
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Owners>Greg Kaestle, Flagscript</Owners>
-    <PackageProjectUrl>https://github.com/flagscript/Flagscript.Gravatar/projects/1</PackageProjectUrl>
-    <PackageReleaseNotes>Beta Release</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/flagscript/Flagscript.Gravatar/projects/3</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/flagscript/Flagscript.Gravatar/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <Summary>Dotnet Standard integration with Gravatar APIs</Summary>
     <PackageTags>dotnet, dotnet-standard, dotnet-library, gravatar, gravatar-library, flagscript</PackageTags>
     <Description>Dotnet Standard integration with Gravatar APIs</Description>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0</FileVersion>
-    <InformationalVersion>1.0.0</InformationalVersion>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <FileVersion>1.0.1</FileVersion>
+    <InformationalVersion>1.0.1</InformationalVersion>
     <PackageId>Flagscript.Gravatar</PackageId>
     <Product>Flagscript.Gravatar</Product>
   </PropertyGroup>
