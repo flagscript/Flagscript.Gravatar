@@ -45,13 +45,13 @@ Flagscript.Gravatar is available as a NuGet package:
 ### .NET CLI
 
 ```bash
-> dotnet add package Flagscript.Gravatar --version 1.0.0
+> dotnet add package Flagscript.Gravatar --version 1.0.1
 ```
 
 ### .csproj
 
 ```xml
-<PackageReference Include="Flagscript.Gravatar" Version="1.0.0" />
+<PackageReference Include="Flagscript.Gravatar" Version="1.0.1" />
 ```
 
 ## Contributing
