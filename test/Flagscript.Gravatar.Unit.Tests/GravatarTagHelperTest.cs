@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+
 using Flurl.Http.Testing;
 using Xunit;
 using Xunit.Abstractions;
 
 using Flagscript.Gravatar.TagHelpers;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Flagscript.Gravatar.Unit.Tests
 {
@@ -38,8 +39,8 @@ namespace Flagscript.Gravatar.Unit.Tests
 		[Fact]
 		public async Task TestTagHelper()
 		{
-		
-			var tagHelper = new GravatarTagHelper();
+			var config = new GravatarTagHelperConfiguration();
+			var tagHelper = new GravatarTagHelper(config);
 
 			var ctx = new TagHelperContext(
 				new TagHelperAttributeList{

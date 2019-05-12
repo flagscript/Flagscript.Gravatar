@@ -57,30 +57,15 @@ namespace Flagscript.Gravatar.TagHelpers
 		private GravatarLibrary Library { get; set; }
 
 		/// <summary>
-		/// Default Constructor.
+		/// Constructor with a <see cref="GravatarTagHelperConfiguration"/> to obtain 
+		/// it.
 		/// </summary>
-		public GravatarTagHelper() => Library = new GravatarLibrary();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="GravatarTagHelper"/> class
-		/// with a logging context.
-		/// </summary>
-		/// <param name="logger">Logger to log errors and warnings.</param>
-		public GravatarTagHelper(ILogger<GravatarTagHelper> logger) => (Library, Logger) = (new GravatarLibrary(), logger);
-
-		/// <summary>
-		/// Constructor with a <see cref="GravatarLibrary"/> to obtain profiles.
-		/// </summary>
-		/// <param name="library">Gravatar Library to obtain profiles.</param>
-		public GravatarTagHelper(GravatarLibrary library) => Library = library;
-
-		/// <summary>
-		/// Constructor with a <see cref="GravatarLibrary"/> to obtain profiles and
-		/// a logging context.
-		/// </summary>
-		/// <param name="library">Gravatar Library to obtain profiles.</param>
-		/// <param name="logger">Logger to log errors and warnings.</param>
-		public GravatarTagHelper(GravatarLibrary library, ILogger<GravatarTagHelper> logger) => (Library, Logger) = (library, logger);
+		/// <param name="configuration">Configuration for the tag help.</param>
+		public GravatarTagHelper(GravatarTagHelperConfiguration configuration)
+		{
+			Library = configuration?.Library ?? new GravatarLibrary();
+			Logger = configuration?.Logger;
+		}
 
 		/// <summary>
 		/// Asynchronously executes the <see cref="TagHelper"/> with the given <c>context</c> 
