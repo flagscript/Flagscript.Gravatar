@@ -17,7 +17,7 @@
     <PackageProjectUrl>https://github.com/flagscript/Flagscript.Gravatar/projects/1</PackageProjectUrl>
     <PackageReleaseNotes>Beta Release</PackageReleaseNotes>
     <Summary>Dotnet Standard integration with Gravatar APIs</Summary>
-    <PackageTags>dotnet, dotnet-standard, dotnet-library, flagscript, gravatar</PackageTags>
+    <PackageTags>dotnet, dotnet-standard, dotnet-library, gravatar, gravatar-library, flagscript</PackageTags>
     <Description>Dotnet Standard integration with Gravatar APIs</Description>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
