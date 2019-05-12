@@ -57,30 +57,15 @@ namespace Flagscript.Gravatar.TagHelpers
 		private GravatarLibrary Library { get; set; }
 
 		/// <summary>
-		/// Default Constructor.
+		/// Constructor with a <see cref="GravatarTagHelperConfiguration"/> to obtain 
+		/// it.
 		/// </summary>
-		public GravatarTagHelper() => Library = new GravatarLibrary();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="GravatarTagHelper"/> class
-		/// with a logging context.
-		/// </summary>
-		/// <param name="logger">Logger to log errors and warnings.</param>
-		public GravatarTagHelper(ILogger<GravatarTagHelper> logger) => (Library, Logger) = (new GravatarLibrary(), logger);
-
-		/// <summary>
-		/// Constructor with a <see cref="GravatarLibrary"/> to obtain profiles.
-		/// </summary>
-		/// <param name="library">Gravatar Library to obtain profiles.</param>
-		public GravatarTagHelper(GravatarLibrary library) => Library = library;
-
-		/// <summary>
-		/// Constructor with a <see cref="GravatarLibrary"/> to obtain profiles and
-		/// a logging context.
-		/// </summary>
-		/// <param name="library">Gravatar Library to obtain profiles.</param>
-		/// <param name="logger">Logger to log errors and warnings.</param>
-		public GravatarTagHelper(GravatarLibrary library, ILogger<GravatarTagHelper> logger) => (Library, Logger) = (library, logger);
+		/// <param name="configuration">Configuration for the tag help.</param>
+		public GravatarTagHelper(GravatarTagHelperConfiguration configuration)
+		{
+			Library = configuration?.Library ?? new GravatarLibrary();
+			Logger = configuration?.Logger;
+		}
 
 		/// <summary>
 		/// Asynchronously executes the <see cref="TagHelper"/> with the given <c>context</c> 
@@ -97,9 +82,11 @@ namespace Flagscript.Gravatar.TagHelpers
 			var gravatarEmail = content.GetContent();
 			if (string.IsNullOrWhiteSpace(gravatarEmail))
 			{
+
 				Logger?.LogWarning($"Tag helper gravatar email missing content. Suppressing output.");
 				output.SuppressOutput();
 				return;
+
 			}
 
 			output.TagName = "img";
@@ -111,12 +98,26 @@ namespace Flagscript.Gravatar.TagHelpers
 				var profile = await Library.GetGravatarProfile(gravatarEmail);
 				if (profile == null)
 				{
+
 					Logger?.LogWarning($"Unable to retrieve gravatar profile for {gravatarEmail}. Suppressing output.");
 					output.SuppressOutput();
 					return;
+
 				}
-				var gravatarUrl = profile.ThumbnailUrl.SetQueryParam("s", Size);
-				output.Attributes.SetAttribute("src", gravatarUrl);
+
+				if (Size.HasValue)
+				{
+
+					output.Attributes.SetAttribute("src", profile.ThumbnailUrl.SetQueryParam("s", Size));
+
+				}
+				else
+				{
+
+					// 80x80
+					output.Attributes.SetAttribute("src", profile.ThumbnailUrl);
+
+				}
 
 			}
 			catch (Exception ex)
@@ -125,16 +126,21 @@ namespace Flagscript.Gravatar.TagHelpers
 				Logger?.LogWarning(ex, $"Exception retrieving gravatar profile for {gravatarEmail}. Suppressing output.");
 				output.SuppressOutput();
 				return;
+
 			}
 			
 			// Pass-through attributes
 			if (!string.IsNullOrWhiteSpace(Alt))
 			{
+
 				output.Attributes.SetAttribute("alt", Alt);
+
 			}
 			if (!string.IsNullOrWhiteSpace(Class))
 			{
+
 				output.Attributes.SetAttribute("class", Class);
+
 			}					
 
 			// html 5 img tag compliance
