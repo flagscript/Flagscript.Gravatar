@@ -13,7 +13,7 @@ Dotnet Standard integration with [https://gravatar.com](Gravatar) APIs.
 
 The Flagscript.Gravatar package has two primary functionalities:
 
-- A library to wrap the Gravatar APIs.
+- A library to wrap the Gravatar REST APIs.
 
 ```csharp
 using Flagscript.Gravatar;
