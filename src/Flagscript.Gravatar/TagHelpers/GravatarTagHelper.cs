@@ -16,11 +16,6 @@ namespace Flagscript.Gravatar.TagHelpers
 	{
 
 		/// <summary>
-		/// Fallback Gravatara Base Url.
-		/// </summary>
-		//private const string GravatarImageBaseUrl = "https://s.gravatar.com/avatar/";
-
-		/// <summary>
 		/// The alt text value
 		/// </summary>
 		/// <remarks>
